@@ -12,12 +12,19 @@ The application helps organizations manage employee attendance, working hours an
 
 | Field | Details |
 |---|---|
-| **Project Name** | SmartAttend — Employee Attendance Management System |
+| Field | Details |
+|---|---|
+| **Project Name** | SmartAttend – Employee Attendance Management System |
 | **Application Type** | Web-based Attendance & Workforce Analytics System |
-| **Status** | 🟢 Completed |
+| **Status** | 🟢 Completed & Deployed |
+| **Live Web App** | 🌐 [Open SmartAttend](https://smartattendutmsourcechatgptcom-blkbfddzfcygcym2sefdca.streamlit.app/) |
 | **Primary Language** | Python |
 | **Web Framework** | Streamlit |
 | **Database** | SQLite |
+| **Data Processing** | Pandas |
+| **Analytics & Visualization** | Plotly |
+| **Application Port** | 8501 |
+| **Repository** | GitHub |
 | **Data Processing** | Pandas |
 | **Analytics & Visualization** | Plotly |
 | **Application Port** | 8501 |
