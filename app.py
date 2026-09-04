@@ -39,35 +39,192 @@ initialize_database()
 
 
 # =================================================
-# CUSTOM CSS
+# PREMIUM CUSTOM CSS
 # =================================================
 
 st.markdown(
     """
-<style>
+    <style>
 
-.main-title {
-    font-size: 42px;
-    font-weight: 800;
-    text-align: center;
-    margin-bottom: 0px;
-}
+    /* ============================================
+       GLOBAL BACKGROUND
+    ============================================ */
 
-.sub-title {
-    text-align: center;
-    color: gray;
-    font-size: 18px;
-    margin-bottom: 30px;
-}
+    .stApp {
+        background:
+            radial-gradient(
+                circle at 15% 20%,
+                rgba(59, 130, 246, 0.18),
+                transparent 30%
+            ),
+            radial-gradient(
+                circle at 85% 80%,
+                rgba(16, 185, 129, 0.12),
+                transparent 28%
+            ),
+            linear-gradient(
+                135deg,
+                #080d18 0%,
+                #101827 50%,
+                #080d18 100%
+            );
+    }
 
-.insight-card {
-    padding: 15px;
-    border-radius: 12px;
-    margin-bottom: 10px;
-}
 
-</style>
-""",
+    /* ============================================
+       MAIN CONTAINER
+    ============================================ */
+
+    .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+
+
+    /* ============================================
+       LOGIN BRANDING
+    ============================================ */
+
+    .main-title {
+        font-size: 58px;
+        font-weight: 850;
+        text-align: center;
+        letter-spacing: -2px;
+        margin-top: 15px;
+        margin-bottom: 5px;
+
+        background:
+            linear-gradient(
+                90deg,
+                #ffffff,
+                #7dd3fc,
+                #a7f3d0
+            );
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+
+    .sub-title {
+        text-align: center;
+        color: #94a3b8;
+        font-size: 18px;
+        margin-bottom: 30px;
+        letter-spacing: 0.5px;
+    }
+
+
+    /* ============================================
+       INPUT BOXES
+    ============================================ */
+
+    div[data-baseweb="input"] > div {
+        background-color: rgba(30, 41, 59, 0.85);
+        border: 1px solid #334155;
+        border-radius: 12px;
+    }
+
+
+    div[data-baseweb="input"] > div:focus-within {
+        border-color: #38bdf8;
+        box-shadow:
+            0 0 0 2px
+            rgba(56, 189, 248, 0.15);
+    }
+
+
+    /* ============================================
+       BUTTONS
+    ============================================ */
+
+    .stButton > button {
+        border-radius: 12px;
+        font-weight: 700;
+        min-height: 48px;
+        border: 1px solid #334155;
+        transition: all 0.2s ease;
+    }
+
+
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        border-color: #38bdf8;
+    }
+
+
+    .stButton > button[kind="primary"] {
+        background:
+            linear-gradient(
+                90deg,
+                #2563eb,
+                #0ea5e9
+            );
+
+        border: none;
+    }
+
+
+    /* ============================================
+       TABS
+    ============================================ */
+
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 10px;
+        justify-content: center;
+    }
+
+
+    .stTabs [data-baseweb="tab"] {
+        height: 45px;
+        border-radius: 10px;
+        padding-left: 25px;
+        padding-right: 25px;
+    }
+
+
+    /* ============================================
+       SIDEBAR
+    ============================================ */
+
+    [data-testid="stSidebar"] {
+        background:
+            linear-gradient(
+                180deg,
+                #0b1220,
+                #111827
+            );
+    }
+
+
+    /* ============================================
+       METRICS
+    ============================================ */
+
+    [data-testid="stMetric"] {
+        background:
+            rgba(30, 41, 59, 0.65);
+
+        border: 1px solid #26364d;
+
+        padding: 18px;
+
+        border-radius: 14px;
+    }
+
+
+    /* ============================================
+       INSIGHT CARDS
+    ============================================ */
+
+    .insight-card {
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 10px;
+    }
+
+    </style>
+    """,
     unsafe_allow_html=True,
 )
 
@@ -78,6 +235,7 @@ st.markdown(
 
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
+
 
 if "user" not in st.session_state:
     st.session_state.user = None
@@ -90,96 +248,205 @@ if "user" not in st.session_state:
 
 def login_page():
 
-    st.markdown("<div class='main-title'>⏱️ SmartAttend</div>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # BRANDING
 
     st.markdown(
-        "<div class='sub-title'>Smart Employee Attendance & Workforce Analytics System</div>",
+        """
+        <div class='main-title'>
+            ⏱️ SmartAttend
+        </div>
+        """,
         unsafe_allow_html=True,
     )
 
-    tab1, tab2 = st.tabs(["🔐 Login", "📝 Register"])
+    st.markdown(
+        """
+        <div class='sub-title'>
+            Smart Employee Attendance & Workforce Analytics System
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-    # ---------------------------------------------
-    # LOGIN
-    # ---------------------------------------------
+    # CENTER LOGIN SECTION
 
-    with tab1:
+    left_space, main_content, right_space = st.columns([1, 1.25, 1])
 
-        st.subheader("Welcome Back 👋")
+    with main_content:
 
-        email = st.text_input("Email Address", key="login_email")
-
-        password = st.text_input("Password", type="password", key="login_password")
-
-        if st.button("Login", use_container_width=True):
-
-            if not email or not password:
-
-                st.warning("Please enter email and password.")
-
-            else:
-
-                user = login_user(email, password)
-
-                if user:
-
-                    st.session_state.logged_in = True
-                    st.session_state.user = user
-
-                    st.success(f"Welcome {user[1]}!")
-
-                    st.rerun()
-
-                else:
-
-                    st.error("Invalid email or password.")
-
-        st.info("HR Demo Login: hr@smartattend.com | Password: admin123")
-
-    # ---------------------------------------------
-    # REGISTER
-    # ---------------------------------------------
-
-    with tab2:
-
-        st.subheader("Create Employee Account")
-
-        name = st.text_input("Full Name", key="register_name")
-
-        email = st.text_input("Email Address", key="register_email")
-
-        password = st.text_input("Password", type="password", key="register_password")
-
-        confirm_password = st.text_input(
-            "Confirm Password", type="password", key="confirm_password"
+        tab1, tab2 = st.tabs(
+            [
+                "🔐 Login",
+                "📝 Register",
+            ]
         )
 
-        if st.button("Create Account", use_container_width=True):
+        # ==========================================
+        # LOGIN
+        # ==========================================
 
-            if not all([name, email, password, confirm_password]):
+        with tab1:
 
-                st.warning("Please fill all fields.")
+            st.markdown("### 👋 Welcome Back")
 
-            elif password != confirm_password:
+            st.caption("Sign in to access your SmartAttend workspace.")
 
-                st.error("Passwords do not match.")
+            st.markdown("<br>", unsafe_allow_html=True)
 
-            elif len(password) < 4:
+            email = st.text_input(
+                "Email Address",
+                placeholder="Enter your email",
+                key="login_email",
+            )
 
-                st.warning("Password must be at least 4 characters.")
+            password = st.text_input(
+                "Password",
+                type="password",
+                placeholder="Enter your password",
+                key="login_password",
+            )
 
-            else:
+            st.markdown("<br>", unsafe_allow_html=True)
 
-                success, message = register_user(name, email, password)
+            if st.button(
+                "🚀 Login to SmartAttend",
+                use_container_width=True,
+                type="primary",
+            ):
 
-                if success:
+                if not email or not password:
 
-                    st.success(message)
-                    st.balloons()
+                    st.warning("Please enter your email and password.")
 
                 else:
 
-                    st.error(message)
+                    user = login_user(
+                        email,
+                        password,
+                    )
+
+                    if user:
+
+                        st.session_state.logged_in = True
+
+                        st.session_state.user = user
+
+                        st.success(f"Welcome back, {user[1]}! 🎉")
+
+                        st.rerun()
+
+                    else:
+
+                        st.error("Invalid email or password.")
+
+            st.markdown("<br>", unsafe_allow_html=True)
+
+            st.caption("🔒 Your credentials are securely protected.")
+
+        # ==========================================
+        # REGISTER
+        # ==========================================
+
+        with tab2:
+
+            st.markdown("### ✨ Create Your Account")
+
+            st.caption("Register as an employee and start managing your attendance.")
+
+            st.markdown("<br>", unsafe_allow_html=True)
+
+            name = st.text_input(
+                "Full Name",
+                placeholder="Enter your full name",
+                key="register_name",
+            )
+
+            register_email = st.text_input(
+                "Email Address",
+                placeholder="Enter your email address",
+                key="register_email",
+            )
+
+            register_password = st.text_input(
+                "Password",
+                type="password",
+                placeholder="Create a password",
+                key="register_password",
+            )
+
+            confirm_password = st.text_input(
+                "Confirm Password",
+                type="password",
+                placeholder="Confirm your password",
+                key="confirm_password",
+            )
+
+            st.markdown("<br>", unsafe_allow_html=True)
+
+            if st.button(
+                "✨ Create My Account",
+                use_container_width=True,
+                type="primary",
+            ):
+
+                if not all(
+                    [
+                        name,
+                        register_email,
+                        register_password,
+                        confirm_password,
+                    ]
+                ):
+
+                    st.warning("Please fill all fields.")
+
+                elif register_password != confirm_password:
+
+                    st.error("Passwords do not match.")
+
+                elif len(register_password) < 4:
+
+                    st.warning("Password must be at least 4 characters.")
+
+                else:
+
+                    success, message = register_user(
+                        name,
+                        register_email,
+                        register_password,
+                    )
+
+                    if success:
+
+                        st.success(message)
+
+                        st.balloons()
+
+                    else:
+
+                        st.error(message)
+
+    # ==========================================
+    # BOTTOM FEATURE STRIP
+    # ==========================================
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+
+        st.caption("⚡ Fast & Simple Attendance")
+
+    with col2:
+
+        st.caption("📊 Smart Workforce Analytics")
+
+    with col3:
+
+        st.caption("🔒 Secure Employee Access")
 
 
 # =================================================
@@ -189,20 +456,36 @@ def login_page():
 
 def employee_dashboard(user):
 
+    # USER DETAILS
+
     user_id = user[0]
+
     user_name = user[1]
+
+    # SIDEBAR
 
     st.sidebar.title("⏱️ SmartAttend")
 
     st.sidebar.success(f"👤 {user_name}")
 
     menu = st.sidebar.radio(
-        "Navigation", ["🏠 Dashboard", "📋 Attendance History", "🏖️ Leave Management"]
+        "Navigation",
+        [
+            "🏠 Dashboard",
+            "📋 Attendance History",
+            "🏖️ Leave Management",
+        ],
     )
 
-    if st.sidebar.button("🚪 Logout", use_container_width=True):
+    # LOGOUT
+
+    if st.sidebar.button(
+        "🚪 Logout",
+        use_container_width=True,
+    ):
 
         st.session_state.logged_in = False
+
         st.session_state.user = None
 
         st.rerun()
@@ -222,15 +505,21 @@ def employee_dashboard(user):
         if today_data:
 
             status = today_data[4]
+
             check_in_time = today_data[1] or "--"
+
             check_out_time = today_data[2] or "--"
+
             working_hours = today_data[3] or 0
 
         else:
 
             status = "Not Checked In"
+
             check_in_time = "--"
+
             check_out_time = "--"
+
             working_hours = 0
 
         # METRICS
@@ -238,32 +527,54 @@ def employee_dashboard(user):
         col1, col2, col3, col4 = st.columns(4)
 
         with col1:
-            st.metric("Today's Status", status)
+
+            st.metric(
+                "Today's Status",
+                status,
+            )
 
         with col2:
-            st.metric("Check-In", check_in_time)
+
+            st.metric(
+                "Check-In",
+                check_in_time,
+            )
 
         with col3:
-            st.metric("Check-Out", check_out_time)
+
+            st.metric(
+                "Check-Out",
+                check_out_time,
+            )
 
         with col4:
-            st.metric("Working Hours", f"{working_hours} hrs")
+
+            st.metric(
+                "Working Hours",
+                f"{working_hours} hrs",
+            )
 
         st.divider()
 
+        # =========================================
         # CHECK-IN / CHECK-OUT
+        # =========================================
 
         col1, col2 = st.columns(2)
 
         with col1:
 
-            if st.button("🟢 CHECK IN", use_container_width=True):
+            if st.button(
+                "🟢 CHECK IN",
+                use_container_width=True,
+            ):
 
                 success, message = check_in(user_id)
 
                 if success:
 
                     st.success(message)
+
                     st.balloons()
 
                     st.rerun()
@@ -274,7 +585,10 @@ def employee_dashboard(user):
 
         with col2:
 
-            if st.button("🔴 CHECK OUT", use_container_width=True):
+            if st.button(
+                "🔴 CHECK OUT",
+                use_container_width=True,
+            ):
 
                 success, message = check_out(user_id)
 
@@ -300,22 +614,44 @@ def employee_dashboard(user):
 
             df = pd.DataFrame(
                 records,
-                columns=["Date", "Check In", "Check Out", "Working Hours", "Status"],
+                columns=[
+                    "Date",
+                    "Check In",
+                    "Check Out",
+                    "Working Hours",
+                    "Status",
+                ],
             )
 
             total_days = len(df)
 
-            present_days = len(df[df["Status"].isin(["Present", "Late"])])
+            present_days = len(
+                df[
+                    df["Status"].isin(
+                        [
+                            "Present",
+                            "Late",
+                        ]
+                    )
+                ]
+            )
 
-            attendance_percentage = round((present_days / total_days) * 100, 1)
+            attendance_percentage = round(
+                (present_days / total_days) * 100,
+                1,
+            )
 
             late_days = len(df[df["Status"] == "Late"])
 
-            avg_hours = round(df["Working Hours"].mean(), 2)
+            avg_hours = round(
+                df["Working Hours"].mean(),
+                2,
+            )
 
-            # ATTENDANCE SCORE
-
-            attendance_score = max(0, attendance_percentage - (late_days * 2))
+            attendance_score = max(
+                0,
+                attendance_percentage - (late_days * 2),
+            )
 
             st.subheader("📊 My Attendance Analytics")
 
@@ -323,19 +659,31 @@ def employee_dashboard(user):
 
             with col1:
 
-                st.metric("Attendance %", f"{attendance_percentage}%")
+                st.metric(
+                    "Attendance %",
+                    f"{attendance_percentage}%",
+                )
 
             with col2:
 
-                st.metric("Attendance Score", f"{attendance_score}%")
+                st.metric(
+                    "Attendance Score",
+                    f"{attendance_score}%",
+                )
 
             with col3:
 
-                st.metric("Late Arrivals", late_days)
+                st.metric(
+                    "Late Arrivals",
+                    late_days,
+                )
 
             with col4:
 
-                st.metric("Average Working Hours", f"{avg_hours} hrs")
+                st.metric(
+                    "Average Working Hours",
+                    f"{avg_hours} hrs",
+                )
 
             # PERFORMANCE MESSAGE
 
@@ -351,9 +699,16 @@ def employee_dashboard(user):
 
                 st.warning("⚠️ Your attendance needs improvement.")
 
-            chart = px.pie(df, names="Status", title="My Attendance Distribution")
+            chart = px.pie(
+                df,
+                names="Status",
+                title="My Attendance Distribution",
+            )
 
-            st.plotly_chart(chart, use_container_width=True)
+            st.plotly_chart(
+                chart,
+                use_container_width=True,
+            )
 
     # =============================================
     # ATTENDANCE HISTORY
@@ -369,12 +724,21 @@ def employee_dashboard(user):
 
             df = pd.DataFrame(
                 records,
-                columns=["Date", "Check In", "Check Out", "Working Hours", "Status"],
+                columns=[
+                    "Date",
+                    "Check In",
+                    "Check Out",
+                    "Working Hours",
+                    "Status",
+                ],
             )
 
-            st.dataframe(df, use_container_width=True)
+            st.dataframe(
+                df,
+                use_container_width=True,
+            )
 
-            # DOWNLOAD PERSONAL REPORT
+            # DOWNLOAD REPORT
 
             csv = df.to_csv(index=False).encode("utf-8")
 
@@ -398,19 +762,34 @@ def employee_dashboard(user):
 
         st.title("🏖️ Leave Management")
 
-        tab1, tab2 = st.tabs(["Apply Leave", "My Leave Requests"])
+        tab1, tab2 = st.tabs(
+            [
+                "Apply Leave",
+                "My Leave Requests",
+            ]
+        )
+
+        # APPLY LEAVE
 
         with tab1:
 
             leave_date = st.date_input("Select Leave Date")
 
             leave_type = st.selectbox(
-                "Leave Type", ["Casual Leave", "Sick Leave", "Unpaid Leave"]
+                "Leave Type",
+                [
+                    "Casual Leave",
+                    "Sick Leave",
+                    "Unpaid Leave",
+                ],
             )
 
             reason = st.text_area("Reason")
 
-            if st.button("Submit Leave Request", use_container_width=True):
+            if st.button(
+                "Submit Leave Request",
+                use_container_width=True,
+            ):
 
                 if not reason:
 
@@ -418,9 +797,16 @@ def employee_dashboard(user):
 
                 else:
 
-                    apply_leave(user_id, leave_date, leave_type, reason)
+                    apply_leave(
+                        user_id,
+                        leave_date,
+                        leave_type,
+                        reason,
+                    )
 
                     st.success("Leave request submitted successfully!")
+
+        # LEAVE HISTORY
 
         with tab2:
 
@@ -429,10 +815,19 @@ def employee_dashboard(user):
             if leaves:
 
                 df = pd.DataFrame(
-                    leaves, columns=["Leave Date", "Leave Type", "Reason", "Status"]
+                    leaves,
+                    columns=[
+                        "Leave Date",
+                        "Leave Type",
+                        "Reason",
+                        "Status",
+                    ],
                 )
 
-                st.dataframe(df, use_container_width=True)
+                st.dataframe(
+                    df,
+                    use_container_width=True,
+                )
 
             else:
 
@@ -446,24 +841,37 @@ def employee_dashboard(user):
 
 def hr_dashboard(user):
 
+    # SIDEBAR
+
     st.sidebar.title("👔 SmartAttend HR")
 
     st.sidebar.success(f"👤 {user[1]}")
 
     menu = st.sidebar.radio(
         "HR Navigation",
-        ["📊 Dashboard", "👥 Employees", "📋 Attendance", "🏖️ Leave Requests"],
+        [
+            "📊 Dashboard",
+            "👥 Employees",
+            "📋 Attendance",
+            "🏖️ Leave Requests",
+        ],
     )
 
-    if st.sidebar.button("🚪 Logout", use_container_width=True):
+    # LOGOUT
+
+    if st.sidebar.button(
+        "🚪 Logout",
+        use_container_width=True,
+    ):
 
         st.session_state.logged_in = False
+
         st.session_state.user = None
 
         st.rerun()
 
     # =============================================
-    # HR HOME DASHBOARD
+    # HR DASHBOARD
     # =============================================
 
     if menu == "📊 Dashboard":
@@ -487,7 +895,15 @@ def hr_dashboard(user):
         today_records = [record for record in attendance if record[2] == today]
 
         present_today = len(
-            [record for record in today_records if record[6] in ["Present", "Late"]]
+            [
+                record
+                for record in today_records
+                if record[6]
+                in [
+                    "Present",
+                    "Late",
+                ]
+            ]
         )
 
         late_today = len([record for record in today_records if record[6] == "Late"])
@@ -502,19 +918,31 @@ def hr_dashboard(user):
 
         with col1:
 
-            st.metric("Total Employees", total_employees)
+            st.metric(
+                "Total Employees",
+                total_employees,
+            )
 
         with col2:
 
-            st.metric("Present Today", present_today)
+            st.metric(
+                "Present Today",
+                present_today,
+            )
 
         with col3:
 
-            st.metric("Late Today", late_today)
+            st.metric(
+                "Late Today",
+                late_today,
+            )
 
         with col4:
 
-            st.metric("Currently Working", currently_working)
+            st.metric(
+                "Currently Working",
+                currently_working,
+            )
 
         st.divider()
 
@@ -539,7 +967,7 @@ def hr_dashboard(user):
                 ],
             )
 
-            # TOTAL LATE CHECK-INS
+            # LATE CHECK-INS
 
             late_count = len(df_insights[df_insights["Status"] == "Late"])
 
@@ -549,7 +977,10 @@ def hr_dashboard(user):
                 df_insights.groupby("Name")
                 .size()
                 .reset_index(name="Attendance Days")
-                .sort_values("Attendance Days", ascending=False)
+                .sort_values(
+                    "Attendance Days",
+                    ascending=False,
+                )
             )
 
             best_employee = attendance_score.iloc[0]["Name"]
@@ -558,7 +989,10 @@ def hr_dashboard(user):
 
             # AVERAGE WORKING HOURS
 
-            avg_work_hours = round(df_insights["Working Hours"].mean(), 2)
+            avg_work_hours = round(
+                df_insights["Working Hours"].mean(),
+                2,
+            )
 
             col1, col2, col3 = st.columns(3)
 
@@ -569,12 +1003,13 @@ def hr_dashboard(user):
             with col2:
 
                 st.success(
-                    f"🏆 Top Performer: {best_employee} ({best_days} attendance days)"
+                    f"🏆 Top Performer: {best_employee} "
+                    f"({best_days} attendance days)"
                 )
 
             with col3:
 
-                st.info(f"📊 Average Working Hours: {avg_work_hours} hrs")
+                st.info(f"📊 Average Working Hours: " f"{avg_work_hours} hrs")
 
             st.divider()
 
@@ -587,10 +1022,15 @@ def hr_dashboard(user):
             with col1:
 
                 status_chart = px.pie(
-                    df_insights, names="Status", title="Overall Attendance Distribution"
+                    df_insights,
+                    names="Status",
+                    title="Overall Attendance Distribution",
                 )
 
-                st.plotly_chart(status_chart, use_container_width=True)
+                st.plotly_chart(
+                    status_chart,
+                    use_container_width=True,
+                )
 
             with col2:
 
@@ -605,7 +1045,10 @@ def hr_dashboard(user):
                     title="Total Working Hours by Employee",
                 )
 
-                st.plotly_chart(hours_chart, use_container_width=True)
+                st.plotly_chart(
+                    hours_chart,
+                    use_container_width=True,
+                )
 
         else:
 
@@ -621,9 +1064,20 @@ def hr_dashboard(user):
 
         employees = get_all_employees()
 
-        df = pd.DataFrame(employees, columns=["ID", "Name", "Email", "Role"])
+        df = pd.DataFrame(
+            employees,
+            columns=[
+                "ID",
+                "Name",
+                "Email",
+                "Role",
+            ],
+        )
 
-        st.dataframe(df, use_container_width=True)
+        st.dataframe(
+            df,
+            use_container_width=True,
+        )
 
     # =============================================
     # ATTENDANCE REPORT
@@ -675,7 +1129,10 @@ def hr_dashboard(user):
                 & (df["Name"].isin(selected_employee))
             ]
 
-            st.dataframe(filtered_df, use_container_width=True)
+            st.dataframe(
+                filtered_df,
+                use_container_width=True,
+            )
 
             # DOWNLOAD CSV
 
@@ -709,7 +1166,7 @@ def hr_dashboard(user):
 
                 leave_id = leave[0]
 
-                with st.expander(f"{leave[1]} — {leave[3]} — {leave[4]}"):
+                with st.expander(f"{leave[1]} — " f"{leave[3]} — " f"{leave[4]}"):
 
                     st.write(f"**Employee Email:** {leave[2]}")
 
@@ -729,7 +1186,10 @@ def hr_dashboard(user):
                                 use_container_width=True,
                             ):
 
-                                update_leave_status(leave_id, "Approved")
+                                update_leave_status(
+                                    leave_id,
+                                    "Approved",
+                                )
 
                                 st.success("Leave approved successfully!")
 
@@ -743,7 +1203,10 @@ def hr_dashboard(user):
                                 use_container_width=True,
                             ):
 
-                                update_leave_status(leave_id, "Rejected")
+                                update_leave_status(
+                                    leave_id,
+                                    "Rejected",
+                                )
 
                                 st.warning("Leave rejected.")
 
@@ -761,6 +1224,7 @@ def hr_dashboard(user):
 if not st.session_state.logged_in:
 
     login_page()
+
 
 else:
 
